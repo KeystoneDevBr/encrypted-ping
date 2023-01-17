@@ -1,14 +1,14 @@
 
 # How to send message with ICMP (ping)  protocol.
 
-## The Advanced Example of The Shell Script Dialog And Python3
+## The Advanced Example of The Shell Script Dialog with Python3
 
-## Who it Works
-
-### 
+## How does it Work 
 
 This app send messages in the boby of the ICMP packeges echo-resquest and echo-replay.
+
 This messages can be send in clear text or cryptografed with SHA256.
+
 
 ![](./imags/index.png)
 
@@ -24,96 +24,119 @@ This messages can be send in clear text or cryptografed with SHA256.
 
 
 # How to Install it
-## Basics packages Installed
+## The Basics packages and the App need to be Installed in the both servers (Sender and receiver)
 
 ```
 sudo apt install dialog
 sudo apt install zip
+
+# You need install python 3.10
+# Try somethin like this
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt update
+    sudo apt install python3.10 -y # You can install latest version
+    python3 --version
+
+# You need install pip
+    sudo apt install python3-pip
+
+# You need install python Scapy library 
+# The installation guite is avaliable in: htts://www.scapy.net
+# If python was instaled before, Tray something like this
+    sudo pip install --pre scapy[complete]
+
+# You need install Crypt.Cyper python libre
+#Try something lik this
+    sudo pip install pycrypto
+
 ```
 
-## Optionals packages
-```
-sudo apt install -y iptables
-sudo apt install -y iptables-persistent
-sudo apt install -y apache2
-
+ 
+### Download the files and extract it
 ```
 
-
-## Download the files and extract it
-```
-
-wget https://github.com/KeystoneDevBr/app_dialog.d/archive/refs/heads/main.zip
+wget https://github.com/KeystoneDevBr/encrypted-ping/archive/refs/heads/main.zip
 
 unzip main.zip 
 
-
-```
-### Copy the files for directory /etc/profile.d
-
-```
-#Copy the app folder for your directory /etc/profile.d/ 
-sudo mv app_dialog.d-main/ /etc/profile.d/app_dialog.d/
-
-#Copy the start file for your directory /etc/profile.d/
-sudo cp /etc/profile.d/app_dialog.d/dialog.sh  /etc/profile.d/
-
-#Check if the  index.sh exists in the app folder 
-ls -la  /etc/profile.d/app_dialog.d/dialog.d/index.sh
-
-#Check if start file is is pointing correctly to index.sh file
-sudo vim /etc/profile.d/dialog.sh
+mv encrypted-ping-main/ ./encrypted-ping/
 
 ```
 
-You neet see something like this
+### Change file permissions
+
+```
+#Grant executable permission
+sudo chmod 775 -R ./encrypted-ping/
+
+#Check the app files
+cd ./encrypted-ping/
+
+#Show files
+ls -1 ./encrypted-ping/
+
+# You need see something like this:
+# ./encrypted-ping/ 
+#            README.md
+#            f_information.sh
+#            f_seng_ping.sh
+#            f_sniff_ping.sh
+#            icmp-receive.py
+#            icmp-send.py
+#           imags
+#            index.sh
+```
+
+## Check python  files (sender and reciver files)
+
+The files icmp-send.py and icmp-receive.py are reponsible for sending and receiving messages. 
+
+### Step 1: Try send and receive clear messages
+
+
+Star the sniffer in the receiver server (192.168.30.1)
+
+```
+# Execute the sniffer in backgroud until the first package received
+sudo python3 ./encrypted-ping/icmp-receive.py  -c n -a 192.168.30.5 &
+
+# Watch the file message
+watch -n 0.1 "cat /tmp/msg_uncrypted.txt"
 
 
 ```
-#!/bin/bash
-#Start the dialog afet all user login
 
-path_app="/etc/profile.d/app_dialog.d/dialog.d"
+Send  message in the sender server (19.168.30.1)
 
-bash "$path_app/index.sh"
+```
+sudo python3 ./encrypted-ping/icmp-send.py -c n -a 192.168.30.5 -m "Clear Message to Send" -q 4
 
 ```
 
-The struture the file needs to be like this:
+#### Step 2: try send an receive crypted messages
 
+
+Star the sniffer in the receiver server (192.168.30.5)
 ```
-/etc/profile.d/dialog.sh
-/etc/profile.d/app_dialog.d/dialog.d/index.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_apache.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_config_ip.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_iptables.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_mysql.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_netplan_apply.sh
-/etc/profile.d/app_dialog.d/dialog.d/f_vm_information.sh
+# Execute the sniffer in backgroud until the first package received
+sudo python3 ./encrypted-ping/icmp-receive.py  -c y -k "key" -a 192.168.30.1 &
+# Watch the file message
+watch -n 0.1 "cat /tmp/msg_decrypted.txt"
 
 
 ```
 
-### Change the owner of files for root
+Send  message in the sender server (19.168.30.5)
 
 ```
-sudo chown root.$USER -R /etc/profile.d/app_dialog.d/ /etc/profile.d/dialog.sh
-
-```
-
-### Turn all files executable
-
-```
-sudo chmod 775 -R  /etc/profile.d/dialog.sh /etc/profile.d/app_dialog.d/
+sudo python3 ./encrypted-ping/icmp-send.py -cy -k "key" -a 192.168.30.1 -m "Crypted Message to Send" -q 4
 
 ```
 
-### Exit and start a new section
-```
-exit
-
-
-ssh  <cliente_name>@<server_address>
+### Start the APP
 
 ```
+sudo ./encrypted-ping/index.sh
+
 ```
+
