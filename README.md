@@ -46,7 +46,8 @@ sudo apt install zip
 
 # You need install Crypt.Cyper python libre
 #Try something lik this
-    sudo pip install pycrypto
+    sudo pip install pycryptodome==3.4.3
+    #obs.: If you install the version 3.16.0 will be have problems
 
 ```
 
