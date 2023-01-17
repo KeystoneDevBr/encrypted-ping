@@ -1,5 +1,5 @@
 
-# How to send message with ICMP (ping)  protocol.
+# How To Send Encrypted Message With ICMP (ping)  Protocol.
 
 ## The Advanced Example of The Shell Script Dialog with Python3
 
