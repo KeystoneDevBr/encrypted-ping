@@ -9,7 +9,6 @@ This app send messages in the boby of the ICMP packeges echo-resquest and echo-r
 
 This messages can be send in clear text or cryptografed with SHA256.
 
-
 ![](./imags/index.png)
 
 ![](./imags/send-menu.png)

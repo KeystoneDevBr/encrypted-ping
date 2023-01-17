@@ -55,18 +55,14 @@ f_sniff_ping() {
         echo "Waiting for the message......"
 
         #Star the sniffer for receive the crypted message
-        sudo python3 ./icmp-receive.py -c n -a $HOST
+        UNCRYPTED_RESULT=$( sudo python3 ./icmp-receive.py -c n -a $HOST )
 
         sleeep 10;
         dialog --stdout \
             --backtitle "$BACKTITLE" \
             --title "Uncrypted Message Received from $HOST" \
-            --msgbox "$(cat /tmp/msg_uncrypted.txt)" \
-            20 0 ;
-        
-        sudo rm -f /tmp/msg_uncrypted.txt
-
-        
+            --msgbox "$(echo $UNCRYPTED_RESULT)" \
+            20 0 ;        
     }
 
     CRYPTED_PING() {
@@ -98,14 +94,14 @@ f_sniff_ping() {
 
         echo "Waiting for the message......"
 
-        sudo python3 ./icmp-receive.py -cy -k $KEY -a $HOST
+        CRYPTED_RESULT=$(sudo python3 ./icmp-receive.py -cy -k $KEY -a $HOST )
         
         #sudo python3 ./icmp-receive.py -cy -k $KEY -a $HOST -f $file
 
         message=$(dialog --stdout \
             --backtitle "$BACKTITLE" \
             --title "Crypted Message Received from $HOST" \
-            --msgbox "$(cat /tmp/msg_decrypted.txt)" \
+            --msgbox "$(echo $CRYPTED_RESULT)" \
             20 0 )
 
         sudo rm -f /tmp/msg_decrypted.txt
