@@ -28,9 +28,10 @@ def pingHandle(for_decrypt,host_address,ping_quantity=1,msg_key='foo'):
     else:
         #Delete old messages
         uncryptedMessage = pingReceived.decode('utf-8') 
-        with open('/tmp/msg_uncrypted.txt', 'w', encoding='utf-8') as file:
-            file.write("")
-            file.write(uncryptedMessage)
+        #with open('/tmp/msg_uncrypted.txt', 'w', encoding='utf-8') as file:
+        #    file.write("")
+        #    file.write(uncryptedMessage)
+        print(uncryptedMessage)
     
 def pingDecrypt(pingReceived,msg_key):
     """ --- This function decrypt the message received --- """
@@ -47,13 +48,14 @@ def pingDecrypt(pingReceived,msg_key):
     cleartext = AES.new(key, AES.MODE_CFB, iv).decrypt(pingReceived[SALT_SIZE:])
 
     #Delete old messages
-    with open('/tmp/msg_decrypted.txt', 'w', encoding='utf-8') as file:
-        file.write('')
+    #with open('/tmp/msg_decrypted.txt', 'w', encoding='utf-8') as file:
+    #    file.write('')
 
     #Handle with decrypted message
     decrytedMsg = cleartext.decode()
-    with open('/tmp/msg_decrypted.txt', 'w', encoding='utf-8') as file:
-        file.write(decrytedMsg)
+    #with open('/tmp/msg_decrypted.txt', 'w', encoding='utf-8') as file:
+    #    file.write(decrytedMsg)
+    print(decrytedMsg)
 
 if __name__ == '__main__':
 

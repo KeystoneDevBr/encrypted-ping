@@ -87,22 +87,18 @@ ls -1 ./encrypted-ping/
 #            index.sh
 ```
 
-## Check python  files (sender and reciver files)
+## Check python  files (sender and receiver files)
 
 The files icmp-send.py and icmp-receive.py are reponsible for sending and receiving messages. 
 
 ### Step 1: Try send and receive clear messages
 
 
-Star the sniffer in the receiver server (192.168.30.1)
+Star the sniffer in the receiver server (192.168.30.5)
 
 ```
 # Execute the sniffer in backgroud until the first package received
-sudo python3 ./encrypted-ping/icmp-receive.py  -c n -a 192.168.30.5 &
-
-# Watch the file message
-watch -n 0.1 "cat /tmp/msg_uncrypted.txt"
-
+sudo python3 ./encrypted-ping/icmp-receive.py  -c n -a 192.168.30.1 
 
 ```
 
@@ -113,30 +109,29 @@ sudo python3 ./encrypted-ping/icmp-send.py -c n -a 192.168.30.5 -m "Clear Messag
 
 ```
 
-#### Step 2: try send an receive crypted messages
+#### Step 2: Try send an receive crypted messages
 
 
 Star the sniffer in the receiver server (192.168.30.5)
 ```
-# Execute the sniffer in backgroud until the first package received
-sudo python3 ./encrypted-ping/icmp-receive.py  -c y -k "key" -a 192.168.30.1 &
-# Watch the file message
-watch -n 0.1 "cat /tmp/msg_decrypted.txt"
-
+sudo python3 ./encrypted-ping/icmp-receive.py  -c y -k "key" -a 192.168.30.1
 
 ```
 
-Send  message in the sender server (19.168.30.5)
+Send  message in the sender server (19.168.30.1)
 
 ```
-sudo python3 ./encrypted-ping/icmp-send.py -cy -k "key" -a 192.168.30.1 -m "Crypted Message to Send" -q 4
+sudo python3 ./encrypted-ping/icmp-send.py -cy -k "key" -a 192.168.30.5 -m "Crypted Message to Send" -q 4
 
 ```
 
 ### Start the APP
 
 ```
-sudo ./encrypted-ping/index.sh
+cd ./encrypted-ping/
+
+# Execute this app insite the folter ./encrypted-ping/
+sudo index.sh
 
 ```
 
